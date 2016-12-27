@@ -12,7 +12,7 @@ var React = require('react');
 var WeatherMessage = ({city, temp}) => {
   // var {city, temp} = props;
   return(
-    <p>The weather of {city} is {temp}</p>
+    <h3 className="text-center">The weather of {city} is {temp} degrees!</h3>
   );
 };
 
