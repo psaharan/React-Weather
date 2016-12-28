@@ -7,6 +7,7 @@ getDefaultProps: function() {
     title: "Error"
   };
 },
+
 propTypes: {
   title: React.PropTypes.string,
   message: React.PropTypes.string.isRequired

@@ -14,23 +14,19 @@ var Weather = React.createClass({
 
   getInitialState: function() {
       return {
-        // city: 'Helsinki',
-        // temp: 5
         isLoading: false
       }
   },
 
   handleNewCity: function(city) {
-    // this.setState({
-    //   city: city,
-    //   temp: 23
-    // });
-    var that = this;
-
     this.setState({
       isLoading: true,
-      errorMessage: undefined
+      errorMessage: undefined,
+      city: undefined,
+      temp: undefined
     });
+
+    var that = this;
 
     openWeatherMap.getTemp(city).then(function(temp){
       // NOTE: 'this' binding does not work in this function, so need to define it outside
@@ -46,6 +42,35 @@ var Weather = React.createClass({
     });
   },
 
+componentDidMount: function() {
+    // the prop of the rendered component is location which has a query for city
+     var city = this.props.location.query.city;
+
+     if (city && city.length >0) {
+       this.handleNewCity(city);
+       // console.log("Window.location.hash is - " + window.location.hash);
+       window.location.hash = '#/';
+     }
+},
+
+// componentWillMount: function() {
+//   this.setState({
+//     city: undefined,
+//     temp: undefined,
+//     isLoading: false
+//   });
+// },
+
+componentWillReceiveProps: function(newProps) {
+  // console.log("this.props.location.query.city << " + this.props.location.query.city + "newProps.props.location.query.city << " + newProps.props.location.query.city);
+  var city = newProps.location.query.city;
+
+  if (city && city.length >0) {
+    this.handleNewCity(city);
+    // console.log("Window.location.hash is - " + window.location.hash);
+    window.location.hash = '#/';
+  }
+},
   render: function(){
     // var city = this.state.city;
     // var message = this.state.temp;
@@ -54,7 +79,8 @@ var Weather = React.createClass({
     function renderMessage() {
       if (isLoading) {
         return <h3 className="text-center">Fetching weather....</h3>;
-      } else if (city && location) {
+      } else if (location && city) {
+        // location is the whole url that is searched!
         return <WeatherMessage city={city} temp={temp} />;
       }
     }
